@@ -1,10 +1,31 @@
 from sale import Sale
+from user import Cashier, Administrator
+from customer import Customer
 
 
 def main():
     print("=== POS SYSTEM ===")
 
+    # Create cashier (logged-in staff)
+    cashier = Cashier(
+        user_id=101,
+        username="cashier01",
+        password="cash123"
+    )
+
+    # Optional: walk-in customer
+    customer = Customer(
+        customer_id=201,
+        name="Walk-in Customer"
+    )
+
+    # Create a sale handled by cashier
     sale = Sale()
+    sale.cashier = cashier
+    sale.customer = customer
+
+    print(f"Cashier on duty: {cashier}")
+    print(f"Customer: {customer}\n")
 
     # --- Scan items ---
     while True:
