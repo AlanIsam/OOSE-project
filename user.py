@@ -5,6 +5,9 @@ class User:
         self.password = password
         self.role = role
 
+    def authenticate(self, username, password):
+        return self.username == username and self.password == password
+
     def get_role(self):
         return self.role
 
@@ -21,7 +24,7 @@ class Cashier(User):
         print(f"Sale {sale.sale_id} handled by {self.username}")
 
 #subclass admin
-class Admin(User):
+class Administrator(User):
     def __init__(self, user_id, username, password):
         super().__init__(user_id, username, password, role="Administrator")
 
@@ -36,5 +39,3 @@ class Admin(User):
 
     def view_security_settings(self, security_config):
         return security_config.get_configuration()
-
-
