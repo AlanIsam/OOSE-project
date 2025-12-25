@@ -1,0 +1,4 @@
+202512001:john_doe:password123:Cashier
+202512002:jane_smith:pass456:Cashier
+202512003:mike_jones:mikepass789:Cashier
+202512004:admin_user:adminpass:Administrator

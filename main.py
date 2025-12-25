@@ -1,31 +1,73 @@
 from sale import Sale
-from user import Cashier, Administrator
+from user import User, Cashier, Administrator
 from customer import Customer
 
 
 def main():
-    print("=== POS SYSTEM ===")
+    print("=== POS SYSTEM LOGIN ===")
 
-    # Create cashier (logged-in staff)
-    cashier = Cashier(
-        user_id=101,
-        username="cashier01",
-        password="cash123"
-    )
+    user = None
 
-    # Optional: walk-in customer
-    customer = Customer(
-        customer_id=201,
-        name="Walk-in Customer"
-    )
+    # Main application loop
+    while True:
+        # Login system (only if not logged in)
+        if user is None:
+            while True:
+                username = input("👤 Enter username: ").strip()
+                password = input("🔒 Enter password: ").strip()
 
-    # Create a sale handled by cashier
-    sale = Sale()
-    sale.cashier = cashier
-    sale.customer = customer
+                user = User.login(username, password)
 
-    print(f"Cashier on duty: {cashier}")
-    print(f"Customer: {customer}\n")
+                if user is None:
+                    print("❌ Login failed. Please try again.\n")
+                    continue
+                else:
+                    print(f"✅ Welcome to the POS System, {user.username}!\n")
+                    break
+
+        # Role-based interface selection
+        if isinstance(user, Administrator):
+            print("🔧 Administrator access granted.")
+            choice = input("Choose interface - (admin) Admin Dashboard or (pos) POS System: ").lower().strip()
+
+            if choice == "admin":
+                result = user.admin_dashboard()
+                if result == "logout":
+                    print("\n🔄 Returning to login...\n")
+                    user = None  # Reset user to trigger login
+                    continue
+            elif choice == "pos":
+                # Continue to POS system
+                pass
+            else:
+                print("❌ Invalid choice. Continuing to POS system...")
+
+        elif isinstance(user, Cashier):
+            print("🛒 Cashier access granted.")
+            # Continue to POS system
+            pass
+        else:
+            print("❌ Unknown user role. Access denied.")
+            user = None
+            continue
+
+        # POS System
+        print("\n=== POS SYSTEM ===")
+        print(f"Staff on duty: {user}")
+
+        # Optional: walk-in customer
+        customer = Customer(
+            customer_id=201,
+            name="Walk-in Customer"
+        )
+
+        # Create a sale handled by the logged-in staff
+        sale = Sale()
+        sale.cashier = user  # Use the logged-in user
+        sale.customer = customer
+
+        print(f"Staff on duty: {user}")
+        print(f"Customer: {customer}\n")
 
     # --- Scan items ---
     while True:
