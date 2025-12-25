@@ -3,39 +3,47 @@ from datetime import datetime
 import uuid
 from payment import CashPayment, CardPayment, CheckPayment
 from item import BackendCatalogueSystem, InventorySystem
+from sale_line_item import SaleLineItem
 
 
 class Sale:
     def __init__(self):
         self.sale_id = str(uuid.uuid4())
         self.date = datetime.now()
-        self.items = []              # List of SaleLineItem
+        self.items = []              # List[SaleLineItem]
         self.total_amount = 0.0
         self.status = "OPEN"
         self.payment = None
         self.coupon = None
         self.cashier = None
         self.customer = None
+
         self.catalogue = BackendCatalogueSystem()
         self.inventory = InventorySystem(self.catalogue)
 
+    # =========================
+    # SALE LINE ITEM
+    # =========================
     def add_item(self, name, quantity):
         item = self.catalogue.get_item_by_name(name)
-        if item:
-            self.items.append({
-                "item": item,
-                "quantity": quantity
-            })
-            print("test not sucessful")
-            self.calculate_total()
-            return True
-        else:
-            print(f"❌ Item '{name}' not found in catalogue.")
+
+        if not item:
+            print(f"❌ Item '{name}' not found.")
             return False
+
+        # Optional: stock check
+        if quantity > item.stock_quantity:
+            print(f"❌ Not enough stock. Available: {item.stock_quantity}")
+            return False
+
+        sale_item = SaleLineItem(item, quantity)
+        self.items.append(sale_item)
+        self.calculate_total()
+        return True
 
     def calculate_total(self):
         self.total_amount = sum(
-            item["item"].getPrice() * item["quantity"] for item in self.items
+            item.calculateSubTotal() for item in self.items
         )
         return self.total_amount
 
@@ -72,9 +80,14 @@ class Sale:
         if payment.process_payment(self.total_amount):
             self.payment = payment
             self.status = "PAID"
+
             # Update inventory
-            for item_entry in self.items:
-                self.inventory.update_stock(item_entry["item"].barcode, -item_entry["quantity"])
+            for sale_item in self.items:
+                self.inventory.updatestock(
+                    sale_item.item.barcode,
+                    -sale_item.quantity
+                )
+
             return True
 
         return False
@@ -87,13 +100,8 @@ class Sale:
         lines.append("======== RECEIPT ========")
         lines.append(f"Sale ID   : {self.sale_id}")
         lines.append(f"Date      : {self.date.strftime('%Y-%m-%d %H:%M:%S')}")
-
-        cashier_name = self.cashier.username if hasattr(self, "cashier") else "N/A"
-        lines.append(f"Cashier   : {cashier_name}")
-
-        customer_name = self.customer.name if hasattr(self, "customer") else "Walk-in"
-        lines.append(f"Customer  : {customer_name}")
-
+        lines.append(f"Cashier   : {self.cashier.username}")
+        lines.append(f"Customer  : {self.customer.name}")
         lines.append("-------------------------")
 
         for item in self.items:
@@ -105,10 +113,7 @@ class Sale:
         lines.append("-------------------------")
 
         if self.coupon:
-            discount = self.coupon.calculateDiscount(
-                self.total_amount / (1 - self.coupon.discount_rate)
-            )
-            lines.append(f"Coupon ({self.coupon.coupon_code}): -RM {discount:.2f}")
+            lines.append(f"Coupon {self.coupon.coupon_code} applied")
 
         lines.append(f"TOTAL     : RM {self.total_amount:.2f}")
         lines.append(f"Payment   : {self.payment.__class__.__name__}")
@@ -119,7 +124,7 @@ class Sale:
 
     def save_receipt(self):
         filename = f"receipt_{self.sale_id}.txt"
-        with open(filename, "w") as file:
-            file.write(self.generate_receipt())
+        with open(filename, "w") as f:
+            f.write(self.generate_receipt())
 
         print(f"🧾 Receipt generated: {filename}")
