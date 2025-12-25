@@ -35,14 +35,15 @@ def main():
             break
 
         try:
-            price = float(input("Enter item price: RM "))
             qty = int(input("Enter quantity: "))
         except ValueError:
             print("❌ Invalid input.\n")
             continue
 
-        sale.add_item(name, price, qty)
-        print(f"Item added. Current total: RM {sale.total_amount:.2f}\n")
+        if sale.add_item(name, qty):
+            print(f"Item added. Current total: RM {sale.total_amount:.2f}\n")
+        else:
+            print("❌ Item not found.\n")
 
     if not sale.items:
         print("❌ No items added. Sale cancelled.")

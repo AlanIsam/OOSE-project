@@ -2,6 +2,7 @@
 from datetime import datetime
 import uuid
 from payment import CashPayment, CardPayment, CheckPayment
+from item import BackendCatalogueSystem, InventorySystem
 
 
 class Sale:
@@ -13,18 +14,28 @@ class Sale:
         self.status = "OPEN"
         self.payment = None
         self.coupon = None
+        self.cashier = None
+        self.customer = None
+        self.catalogue = BackendCatalogueSystem()
+        self.inventory = InventorySystem(self.catalogue)
 
-    def add_item(self, name, price, quantity=1):
-        self.items.append({
-            "name": name,
-            "price": price,
-            "quantity": quantity
-        })
-        self.calculate_total()
+    def add_item(self, name, quantity):
+        item = self.catalogue.get_item_by_name(name)
+        if item:
+            self.items.append({
+                "item": item,
+                "quantity": quantity
+            })
+            print("test not sucessful")
+            self.calculate_total()
+            return True
+        else:
+            print(f"❌ Item '{name}' not found in catalogue.")
+            return False
 
     def calculate_total(self):
         self.total_amount = sum(
-            item["price"] * item["quantity"] for item in self.items
+            item["item"].getPrice() * item["quantity"] for item in self.items
         )
         return self.total_amount
 
@@ -55,6 +66,9 @@ class Sale:
         if payment.process_payment(self.total_amount):
             self.payment = payment
             self.status = "PAID"
+            # Update inventory
+            for item_entry in self.items:
+                self.inventory.update_stock(item_entry["item"].barcode, -item_entry["quantity"])
             return True
 
         return False
