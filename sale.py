@@ -1,5 +1,7 @@
+# sale.py
 from datetime import datetime
 import uuid
+from payment import CashPayment, CardPayment, CheckPayment
 
 
 class Sale:
@@ -25,14 +27,20 @@ class Sale:
         )
         return self.total_amount
 
-    def checkout(self, payment_method, amount):
-        from payment import Payment
+    def checkout(self, payment_type, amount):
+        if payment_type == "cash":
+            payment = CashPayment(amount)
+        elif payment_type == "card":
+            payment = CardPayment(amount)
+        elif payment_type == "check":
+            payment = CheckPayment(amount)
+        else:
+            print("Invalid payment method.")
+            return False
 
-        payment = Payment(payment_method, amount)
-
-        if payment.process(self.total_amount):
+        if payment.process_payment(self.total_amount):
             self.payment = payment
             self.status = "PAID"
             return True
-        else:
-            return False
+
+        return False

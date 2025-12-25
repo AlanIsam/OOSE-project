@@ -5,6 +5,9 @@ class User:
         self.password = password
         self.role = role
 
+    def authenticate(self, username, password):
+        return self.username == username and self.password == password
+
     def get_role(self):
         return self.role
 
