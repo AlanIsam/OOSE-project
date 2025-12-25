@@ -3,6 +3,8 @@ from sale import Sale
 from coupon import Coupon
 from customer import Customer
 from user import User, Cashier, Administrator
+from catalogueSystem import BackendCatalogueSystem
+from return_item import Return
 
 
 def login_loop():
@@ -20,11 +22,8 @@ def login_loop():
             print("❌ Login failed. Try again.\n")
 
 
-def cashier_pos_flow(user):
-    """Cashier POS workflow"""
-    print("🛒 POS SYSTEM (Cashier Mode)")
-    print(f"Staff on duty: {user}\n")
-
+def sale_flow(user):
+    """Handle sales transaction"""
     sale = Sale()
     customer = Customer(0, "Walk-in Customer")
 
@@ -109,8 +108,67 @@ def cashier_pos_flow(user):
             print("❌ Payment failed. Try again.")
 
 
+def return_flow(user):
+    """Handle return transaction"""
+    print("🔄 RETURN SYSTEM")
+    print(f"Staff on duty: {user}\n")
+
+    receipt_id = input("Enter original receipt ID: ").strip()
+    catalogue = BackendCatalogueSystem()
+    return_obj = Return(receipt_id, catalogue)
+
+    if not return_obj.verifyoriginalreceipt():
+        print("❌ Receipt not found.")
+        return
+
+    print("✅ Receipt verified.")
+
+    # -------------------------
+    # ADD ITEMS TO RETURN
+    # -------------------------
+    while True:
+        item_name = input("Enter item name to return (or 'done'): ").strip()
+        if item_name.lower() == "done":
+            break
+
+        try:
+            qty = int(input("Enter quantity: "))
+        except ValueError:
+            print("❌ Invalid quantity.\n")
+            continue
+
+        if return_obj.additemtoreturn(item_name, qty):
+            print(f"Item added. Current refund: RM {return_obj.refundtotal:.2f}\n")
+        else:
+            print("❌ Item not found.\n")
+
+    if return_obj.return_items:
+        return_obj.process_return()
+        print("✅ Return processed.")
+    else:
+        print("❌ No items to return.")
+
+
+def cashier_pos_flow(user):
+
+    sale = Sale()
+    customer = Customer(0, "Walk-in Customer")
+
+    """Cashier POS workflow"""
+    print("🛒 POS SYSTEM (Cashier Mode)")
+    print(f"Staff on duty: {user}\n")
+
+    choice = input("Choose action: (sale/return): ").lower().strip()
+    if choice == "sale":
+        sale_flow(user)
+    elif choice == "return":
+        return_flow(user)
+    else:
+        print("❌ Invalid choice.")
+
+
 def admin_flow(user):
-    """Administrator dashboard"""
+    # Administrator dashboard
     print("🔧 Administrator Mode")
     result = user.admin_dashboard()
 

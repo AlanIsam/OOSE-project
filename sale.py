@@ -1,8 +1,10 @@
 # sale.py
 from datetime import datetime
 import uuid
+import os
 from payment import CashPayment, CardPayment, CheckPayment
-from item import BackendCatalogueSystem, InventorySystem
+from catalogueSystem import BackendCatalogueSystem
+from inventorySystem import InventorySystem
 from sale_line_item import SaleLineItem
 
 
@@ -122,9 +124,21 @@ class Sale:
 
         return "\n".join(lines)
 
+    def record_transaction(self):
+        # Store sale record in transaction_record.txt using ":" as tokenizer
+        payment_type = self.payment.__class__.__name__ if self.payment else "N/A"
+        items_summary = ";".join([f"{item.getItemName()}x{item.quantity}" for item in self.items])
+        record = f"{self.sale_id}:{self.date.strftime('%Y-%m-%d %H:%M:%S')}:{self.cashier.username}:{self.customer.name}:{items_summary}:{self.total_amount:.2f}:{payment_type}"
+        with open("transaction_record.txt", 'a') as f:
+            f.write(record + "\n")
+
     def save_receipt(self):
-        filename = f"receipt_{self.sale_id}.txt"
+        folder = "receipt_record"
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        filename = f"{folder}/receipt_{self.sale_id}.txt"
         with open(filename, "w") as f:
             f.write(self.generate_receipt())
+        self.record_transaction()
 
         print(f"🧾 Receipt generated: {filename}")
