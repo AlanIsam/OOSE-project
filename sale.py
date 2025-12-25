@@ -28,6 +28,51 @@ class Sale:
         )
         return self.total_amount
 
+
+    def generate_receipt(self):
+        lines = []
+        lines.append("======== RECEIPT ========")
+        lines.append(f"Sale ID   : {self.sale_id}")
+        lines.append(f"Date      : {self.date.strftime('%Y-%m-%d %H:%M:%S')}")
+
+        cashier_name = self.cashier.username if hasattr(self, "cashier") else "N/A"
+        lines.append(f"Cashier   : {cashier_name}")
+
+        customer_name = self.customer.name if hasattr(self, "customer") else "Walk-in"
+        lines.append(f"Customer  : {customer_name}")
+
+        lines.append("-------------------------")
+
+        for item in self.items:
+            name = item["name"]
+            qty = item["quantity"]
+            price = item["price"]
+            subtotal = qty * price
+            lines.append(f"{name} x{qty} @ RM {price:.2f} = RM {subtotal:.2f}")
+
+        lines.append("-------------------------")
+
+        if self.coupon:
+            discount = self.coupon.calculateDiscount(
+                self.total_amount / (1 - self.coupon.discount_rate)
+            )
+            lines.append(f"Coupon ({self.coupon.coupon_code}): -RM {discount:.2f}")
+
+        lines.append(f"TOTAL     : RM {self.total_amount:.2f}")
+        lines.append(f"Payment   : {self.payment.__class__.__name__}")
+        lines.append("STATUS    : PAID")
+        lines.append("=========================")
+
+        return "\n".join(lines)
+
+    def save_receipt(self):
+        filename = f"receipt_{self.sale_id}.txt"
+        with open(filename, "w") as file:
+            file.write(self.generate_receipt())
+
+        print(f"🧾 Receipt generated: {filename}")
+
+
     def apply_coupon(self, coupon):
         if not coupon.isValid():
             return False
