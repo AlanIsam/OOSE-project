@@ -1,0 +1,14 @@
+======== RECEIPT ========
+Sale ID   : 1528d9f1-5b00-40ad-b5ce-888437d51f48
+Date      : 2025-12-26 01:20:43
+Cashier   : alan_isam
+Customer  : Walk-in Customer
+-------------------------
+car x10 = RM 100.00
+car x32 = RM 3904.00
+-------------------------
+Coupon (SAVE10): -RM 400.40
+TOTAL     : RM 3603.60
+Payment   : CashPayment
+STATUS    : PAID
+=========================
