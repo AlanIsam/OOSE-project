@@ -49,19 +49,39 @@ class BackendCatalogueSystem:
         return item.getPrice() if item else None
 
     def get_details(self, barcode):
+        return self.getItemDetail(barcode)
+
+    def getItemDetail(self, barcode):
         item = self.get_item(barcode)
         return item.getDetails() if item else None
+
+    def VerifyCoupon(self, coupon_code):
+        # Placeholder for coupon verification
+        # Assuming coupons are handled elsewhere, return False for now
+        return False
+
+    def recordTransaction(self, transaction_data):
+        # Placeholder for recording transaction
+        # Could log to a file or database
+        print(f"Transaction recorded: {transaction_data}")
 
 
 class InventorySystem:
     def __init__(self, catalogue):
         self.catalogue = catalogue
 
-    def update_stock(self, barcode, quantity_change):
+    def checkstock(self, barcode):
+        item = self.catalogue.get_item(barcode)
+        return item.stock_quantity if item else None
+
+    def updatestock(self, barcode, quantity_change):
         item = self.catalogue.get_item(barcode)
         if item:
             item.updateStock(quantity_change)
             self.save_inventory()
+
+    def restockitem(self, barcode, quantity):
+        self.updatestock(barcode, quantity)
 
     def save_inventory(self):
         try:
