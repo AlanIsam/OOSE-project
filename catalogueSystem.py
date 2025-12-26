@@ -24,7 +24,11 @@ class BackendCatalogueSystem:
         return self.items.get(barcode)
 
     def get_item_by_name(self, name):
-        return self.name_to_item.get(name)
+        # Case-insensitive search
+        for item_name, item in self.name_to_item.items():
+            if item_name.lower() == name.lower():
+                return item
+        return None
 
     def get_price(self, barcode):
         item = self.get_item(barcode)
