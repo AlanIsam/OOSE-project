@@ -1,0 +1,12 @@
+======== RECEIPT ========
+Sale ID   : 29f286e1-c37f-4b1a-aa8b-fc93d948973d
+Date      : 2025-12-26 14:56:20
+Cashier   : alan_isam
+Customer  : Walk-in Customer
+-------------------------
+Apple x10 = RM 15.00
+-------------------------
+TOTAL     : RM 15.00
+Payment   : CashPayment
+STATUS    : PAID
+=========================
