@@ -7,7 +7,7 @@ from administrator import Administrator
 def cashier_pos_flow(user):
 
     """Cashier POS workflow"""
-    print("🛒 POS SYSTEM (Cashier Mode)")
+    print("POS SYSTEM (Cashier Mode)")
     print(f"Staff on duty: {user}\n")
 
     choice = input("Choose action: (sale/return): ").lower().strip()
@@ -21,7 +21,7 @@ def cashier_pos_flow(user):
 
 def admin_flow(user):
     # Administrator dashboard
-    print("🔧 Administrator Mode")
+    print(" Administrator Mode")
     result = user.admin_dashboard()
 
     if result == "logout":
@@ -49,7 +49,7 @@ def main():
         # -------------------------
         choice = input("\nReturn to login? (yes/no): ").lower().strip()
         if choice != "yes":
-            print("👋 Exiting POS system. Goodbye!")
+            print("Exiting POS system. Goodbye!")
             break
 
 

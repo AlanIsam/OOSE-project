@@ -67,7 +67,7 @@ class Cashier(User):
             if sale.apply_coupon(coupon):
                 break
             else:
-                print("🔁 Coupon not applied. Returning to subtotal...")
+                print("Coupon not applied. Returning to subtotal...")
 
         # -------------------------
         # PAYMENT LOOP

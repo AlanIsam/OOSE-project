@@ -30,12 +30,12 @@ class Sale:
         item = self.catalogue.get_item_by_name(name)
 
         if not item:
-            print(f"❌ Item '{name}' not found.")
+            print(f"Item '{name}' not found.")
             return False
 
         # Optional: stock check
         if quantity > item.stock_quantity:
-            print(f"❌ Not enough stock. Available: {item.stock_quantity}")
+            print(f"Not enough stock. Available: {item.stock_quantity}")
             return False
 
         sale_item = SaleLineItem(item, quantity)
@@ -61,8 +61,8 @@ class Sale:
         coupon.markAsUsed()
         self.coupon = coupon
 
-        print(f"✅ Coupon applied! Discount: RM {discount:.2f}")
-        print(f"🧾 New total: RM {self.total_amount:.2f}")
+        print(f"Coupon applied! Discount: RM {discount:.2f}")
+        print(f"New total: RM {self.total_amount:.2f}")
         return True
 
     # =========================
@@ -76,7 +76,7 @@ class Sale:
         elif payment_type == "check":
             payment = CheckPayment(amount)
         else:
-            print("❌ Invalid payment method.")
+            print("Invalid payment method.")
             return False
 
         if payment.process_payment(self.total_amount):

@@ -1,4 +1,6 @@
 # payment.py
+#Implemented by Alan Isam anak Recky
+#103166
 import uuid
 from datetime import datetime
 
@@ -50,17 +52,17 @@ class CardPayment(Payment):
 
         # Basic format checks
         if not (self.card_number.isdigit() and len(self.card_number) == 16):
-            print("❌ Invalid card number format.")
+            print(" Invalid card number format.")
             return False
 
         if not (self.cvv.isdigit() and len(self.cvv) == 3):
-            print("❌ Invalid CVV format.")
+            print(" Invalid CVV format.")
             return False
 
         try:
             entered_expiry = datetime.strptime(self.expiry, "%Y-%m")
         except ValueError:
-            print("❌ Invalid expiry date format.")
+            print(" Invalid expiry date format.")
             return False
 
         # Load mock card database
@@ -72,23 +74,23 @@ class CardPayment(Payment):
                     if card_no == self.card_number:
                         # CVV check
                         if file_cvv != self.cvv:
-                            print("❌ CVV mismatch.")
+                            print("CVV mismatch.")
                             return False
 
                         # Expiry check
                         card_expiry = datetime.strptime(file_expiry, "%Y-%m")
                         if card_expiry < datetime.now():
-                            print("❌ Card expired.")
+                            print("Card expired.")
                             return False
 
-                        print("✅ Card authorized.")
+                        print(" Card authorized.")
                         return True
 
-            print("❌ Card not found.")
+            print("Card not found.")
             return False
 
         except FileNotFoundError:
-            print("❌ Card database not found.")
+            print(" Card database not found.")
             return False
 
 

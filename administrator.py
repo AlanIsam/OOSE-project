@@ -29,13 +29,13 @@ class Administrator(User):
 
                 if choice == "1":
                     print("\n" + "─" * 40)
-                    print("📋 VIEWING ALL USERS")
+                    print(" VIEWING ALL USERS")
                     print("─" * 40)
                     self.viewUser()
 
                 elif choice == "2":
                     print("\n" + "─" * 40)
-                    print("➕ CREATING NEW USER")
+                    print(" CREATING NEW USER")
                     print("─" * 40)
                     try:
                         user_id = int(input("Enter User ID: "))
@@ -58,7 +58,7 @@ class Administrator(User):
 
                 elif choice == "3":
                     print("\n" + "─" * 40)
-                    print("✏️  UPDATING USER INFORMATION")
+                    print("  UPDATING USER INFORMATION")
                     print("─" * 40)
                     try:
                         user_id = int(input("Enter User ID to update: "))
@@ -79,7 +79,7 @@ class Administrator(User):
 
                 elif choice == "4":
                     print("\n" + "─" * 40)
-                    print("🗑️  DELETING USER")
+                    print(" DELETING USER")
                     print("─" * 40)
                     try:
                         user_id = int(input("Enter User ID to delete: "))
@@ -95,7 +95,7 @@ class Administrator(User):
 
                 elif choice == "5":
                     print("\n" + "─" * 40)
-                    print("🚪 LOGGING OUT - RETURNING TO LOGIN")
+                    print("LOGGING OUT - RETURNING TO LOGIN")
                     print("─" * 40)
                     print(f"Goodbye, {self.username}!")
                     return "logout"  # Return logout signal
@@ -104,7 +104,7 @@ class Administrator(User):
                     print(" Invalid choice! Please enter a number between 1 and 5.")
 
             except KeyboardInterrupt:
-                print("\n\n⚠️  Operation cancelled by user.")
+                print("\n\nOperation cancelled by user.")
                 return "logout"  # Treat Ctrl+C as logout
             except Exception as e:
                 print(f" An error occurred: {e}")
