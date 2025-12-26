@@ -1,1 +1,4 @@
 88338666-a08f-41ec-9544-b7cccb72ae08:2025-12-26 10:59:08:alan_isam:Walk-in Customer:Applex4:6.00:CashPayment
+432e4870-d2d5-40f6-8185-9fb222e3168d:2025-12-26 11:11:37:alan_isam:Walk-in Customer:Applex5:7.50:CashPayment
+02cc0131-8752-42b0-ac82-3825f50bf593:2025-12-26 11:15:39:alan_isam:Walk-in Customer:Applex3:4.50:CashPayment
+6b033f59-d7ae-438c-8d1c-db17323c887a:2025-12-26 11:17:34:alan_isam:Walk-in Customer:Bananax5:3.75:CashPayment

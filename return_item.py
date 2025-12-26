@@ -15,7 +15,7 @@ class Return:
 
     def verifyoriginalreceipt(self):
         # Verify if the original receipt exists by checking the receipt file
-        filename = f"receipt_{self.originalreceiptID}.txt"
+        filename = f"receipt_record/receipt_{self.originalreceiptID}.txt"
         return os.path.exists(filename)
 
     def additemtoreturn(self, item_name, quantity):

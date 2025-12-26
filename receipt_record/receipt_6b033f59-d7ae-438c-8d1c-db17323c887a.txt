@@ -1,0 +1,12 @@
+======== RECEIPT ========
+Sale ID   : 6b033f59-d7ae-438c-8d1c-db17323c887a
+Date      : 2025-12-26 11:17:34
+Cashier   : alan_isam
+Customer  : Walk-in Customer
+-------------------------
+Banana x5 = RM 3.75
+-------------------------
+TOTAL     : RM 3.75
+Payment   : CashPayment
+STATUS    : PAID
+=========================
